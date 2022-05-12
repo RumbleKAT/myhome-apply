@@ -3,12 +3,34 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "devDependencies": {
-    "nuxt3": "^3.0.0-27356801.e9128f3"
+    "@types/jest": "^27.5.1",
+    "jest": "^28.1.0",
+    "nuxt3": "^3.0.0-27356801.e9128f3",
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.6.4"
   },
   "dependencies": {
     "h3": "^0.7.8"
+  },
+  "jest": {
+    "transform": {
+        "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "\\.test\\.ts$",
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "json"
+    ],
+    "globals": {
+        "ts-jest": {
+            "diagnostics": true
+        }
+    }
   }
 }
