@@ -1,7 +1,6 @@
-const axios = require("axios");
-require('dotenv').config();
+import axios from 'axios';
 
-const host="https://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1";
+// const host="https://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1";
 const service = {
     "APT" : "getAPTLttotPblancDetail",
     "NonApt" : "getUrbtyOfctlLttotPblancDetail",
@@ -14,7 +13,7 @@ const service_detail = {
     "Remain" : "getRemndrLttotPblancMdl"
 }
 
-const rate_host = "https://api.odcloud.kr/api/ApplyhomeInfoCmpetRtSvc/v1";
+// const rate_host = "https://api.odcloud.kr/api/ApplyhomeInfoCmpetRtSvc/v1";
 const rate_service = {
     "01" : "getAPTLttotPblancCmpet",
     "02" : "getUrbtyOfctlLttotPblancCmpet",
@@ -22,8 +21,6 @@ const rate_service = {
     "06" : "getCancResplLttotPblancCmpet",
     "04" : "getRemndrLttotPblancCmpet"
 };
-
-
 
 let flag = {
     APT : false,
@@ -52,7 +49,7 @@ const serviceKey = process.env.SERVICE_KEY;
 
 //그달에 존재하는 청약정보를 모두 가져온다.
 
-exports.getAptInfo = async function(param,serviceType){
+export const getAptInfo = async function(param,serviceType, host){
     //getLttotPblancList APT분양조회
     if(!param || !serviceType) return new Error("Validation Error...");
     if(flag.lastDate === new Date().toLocaleDateString()){
@@ -129,7 +126,7 @@ exports.getAptInfo = async function(param,serviceType){
     return resultArr;
 };
 
-exports.getDetailInfo = async function(param, serviceType){
+export const getDetailInfo = async function(param, serviceType,host){
     if(!param.houseManageNo || !param.pblancNo || !serviceType) throw new Error("Validation Error...");
 
     if(cacheDetailMap.has(param.houseManageNo)){
@@ -164,7 +161,7 @@ exports.getDetailInfo = async function(param, serviceType){
     return detailInfo;
 }
 
-exports.getRateInfo = async function(param){
+export const getRateInfo = async function(param, rate_host){
     if(!param.houseManageNo || !param.houseSeCd) throw new Error("Validation Error...");
     
     // if(cacheRateMap.has(param.houseManageNo)){
@@ -203,7 +200,7 @@ exports.getRateInfo = async function(param){
     return detailInfo;
 }
 
-exports.rowMapper = function(param,userId){
+export const rowMapper = function(param,userId){
     let applyList = [];
     param.map((p)=>{
         const { 
@@ -232,7 +229,7 @@ exports.rowMapper = function(param,userId){
     return applyList;
 }
 
-exports.getCurrentDate = function(){
+export const getCurrentDate = function(){
     const current = new Date();
     const year = current.getFullYear(); 
     const month = current.getMonth() + 1; 

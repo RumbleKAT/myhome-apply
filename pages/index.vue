@@ -14,6 +14,10 @@ export default {
   components : {
     Calendar
   },
+  async mounted(){
+    const { data } = await $fetch('/api/hello/getInfo?category=APT');
+    alert(data);
+  }
 };
 </script>
 
