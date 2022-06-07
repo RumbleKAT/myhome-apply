@@ -1,4 +1,4 @@
-import { getColor, leftPad, toStringByFormatting } from "../utils/Color";
+import { getColor, leftPad, toStringByFormatting } from "../../server/utils/Color";
 
 describe('Color Files Validation',()=>{
     test('서울 컬러 리턴 확인',()=>{
