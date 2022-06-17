@@ -98,16 +98,18 @@ export const getAptInfo = async function(param,serviceType, host){
     
     pageSize = matchCount;
     url = `${host}/${serviceNM}?page=${pageNum}&perPage=${pageSize}&cond[RCRIT_PBLANC_DE::GTE]=${param.startmonth}&&serviceKey=${serviceKey}`;
-    
+    // console.log(url);
+
     const resultArr = await axios.get(url)
     .then(res=>{
         const { data } = res.data;
-        // console.log(currentCount);
         return data;
     }).catch(err=>{
         console.error(err);
         return {"msg" : err.toString()};
     });
+    
+    // console.log(resultArr)
 
     if(serviceType === 'APT'){
         flag.APT = true;
@@ -123,7 +125,8 @@ export const getAptInfo = async function(param,serviceType, host){
     if(resultArr.hasOwnProperty("msg")){
         return resultArr.msg;
     }
-    return resultArr;
+
+    return pageSize;
 };
 
 export const getDetailInfo = async function(param, serviceType,host){
@@ -237,11 +240,6 @@ export const getCurrentDate = function(){
     return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`;
 }
 
-
-// this.getAptInfo({startmonth : '2022-03', endmonth:'2022-04'}, 'APT')
-// .then((res)=>{
-//     console.log(res);
-// })
 // this.getDetailInfo({houseManageNo: '2022910052', pblancNo: '2022910052'}, 'Remain')
 // .then((res)=>console.log(res));
 

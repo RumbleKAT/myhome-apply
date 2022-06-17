@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/getInfo',async(req,res)=>{
+
   const currentDate = new Date();
   let nextMonth:string = `${(new Date().getMonth()+1)%12 + 1}`;
   if(nextMonth.length < 2){
@@ -32,12 +33,14 @@ router.get('/getInfo',async(req,res)=>{
   const end_month = `${currentYear}-${nextMonth}}`;
   // const nextMonth = 
   const { category } = useQuery(req)
-  // console.log(month);
+  console.log(category);
 
   const aptList = await getAptInfo({
     startmonth : start_month,
     endmonth : end_month
   },category, process.env.HOST);
+  
+  console.log(aptList);
 
   return { "data" : aptList } ;
 });
