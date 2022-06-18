@@ -1,18 +1,12 @@
 import { createApp, createRouter,useQuery } from 'h3'
-import {getAptInfo} from '../utils/HomeInfo'
+import {getAptInfo, getDetailInfo,getRateInfo} from '../utils/HomeInfo'
 
 const app = createApp()
 const router = createRouter()
 
 app.use(router)
 
-router.get('/', async (req, res) => {
-  const result = await getAptInfo({startmonth : '2022-03', endmonth:'2022-04'}, 'APT',process.env.HOST);
-  console.log(result);
-  return 'Hello World'
-});
-
-router.get('/getInfo',async(req,res)=>{
+router.get('/getInfo',async(req)=>{
 
   const currentDate = new Date();
   let nextMonth:string = `${(new Date().getMonth()+1)%12 + 1}`;
@@ -33,20 +27,32 @@ router.get('/getInfo',async(req,res)=>{
   const end_month = `${currentYear}-${nextMonth}}`;
   // const nextMonth = 
   const { category } = useQuery(req)
-  console.log(category);
+  // console.log(category);
 
   const aptList = await getAptInfo({
     startmonth : start_month,
     endmonth : end_month
   },category, process.env.HOST);
-  
-  console.log(aptList);
 
   return { "data" : aptList } ;
 });
 
-router.post('/demo', (req, res) => {
-  res.end('my example')
-})
+router.get('/getInfoDetail',async(req)=>{
+  const { category,houseManageNo,pblancNo } = useQuery(req);
+
+  const aptList = await getDetailInfo({
+      houseManageNo : houseManageNo,
+      pblancNo : pblancNo
+  },category,process.env.HOST);
+
+  return { "data" : aptList } ;
+});
+
+router.get('/getRateInfo',async(req)=>{
+  const { houseManageNo,houseSeCd } = useQuery(req);
+
+  const rateList = await getRateInfo({houseManageNo: houseManageNo, houseSeCd : houseSeCd}, process.env.RATE_HOST);
+  return { "data" : rateList } ;
+});
 
 export default app
