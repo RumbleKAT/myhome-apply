@@ -5,7 +5,7 @@ import cors from 'cors';
 const app = createApp()
 const router = createRouter()
 
-app.use(cors);
+app.use(cors());
 app.use(router)
 
 router.get('/getInfo',async(req)=>{
