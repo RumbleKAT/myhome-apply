@@ -126,7 +126,7 @@ export const getAptInfo = async function(param,serviceType, host){
         return resultArr.msg;
     }
 
-    return pageSize;
+    return resultArr;
 };
 
 export const getDetailInfo = async function(param, serviceType,host){
