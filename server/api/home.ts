@@ -1,9 +1,11 @@
 import { createApp, createRouter,useQuery } from 'h3'
 import {getAptInfo, getDetailInfo,getRateInfo} from '../utils/HomeInfo'
+import cors from 'cors';
 
 const app = createApp()
 const router = createRouter()
 
+app.use(cors);
 app.use(router)
 
 router.get('/getInfo',async(req)=>{

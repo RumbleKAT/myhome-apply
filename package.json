@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "h3": "^0.7.8",
     "v-calendar": "^3.0.0-alpha.8"
   },
