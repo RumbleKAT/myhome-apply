@@ -7,6 +7,7 @@
     "test": "jest --detectOpenHandles --forceExit"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^27.5.1",
     "jest": "^28.1.0",
     "nuxt3": "^3.0.0-27356801.e9128f3",
@@ -16,7 +17,9 @@
   "dependencies": {
     "axios": "^0.27.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "h3": "^0.7.8",
+    "mysql": "^2.18.1",
     "v-calendar": "^3.0.0-alpha.8"
   },
   "jest": {
