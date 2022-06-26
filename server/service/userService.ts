@@ -14,9 +14,11 @@ export const selectByEmail = async function(param){
 //     email : 'ssj318@naver.com'
 // }
 export const createId = async function(param){
+    const duplicated = await execute<IHomeInfo>('select * from home_info where email = ?', Object.values(param));
+    if(duplicated[0] != null){
+        throw new Error("duplicated email address exception");
+    }
     const res = await execute<{ affectedRows: number }>(`insert into home_info(email) values ( ? );`,Object.values(param));
-    console.log(res);
-    
     return res.affectedRows > 0;
 }
 
