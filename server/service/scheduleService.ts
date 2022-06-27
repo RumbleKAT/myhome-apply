@@ -24,7 +24,7 @@ export const selectByUserId = async function(param){
 // };
 
 export const createApply = async function(param){
-    console.log(Object.values(param));
+    // console.log(Object.values(param));
     const res = await execute<{ affectedRows: number }>(`insert into home_apply(
                                         houseManageNo, 
                                         pblancNo, 
