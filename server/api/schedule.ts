@@ -66,13 +66,23 @@ router.post('/applyArr', async(req)=>{
     }
 });
 
-router.delete('/applyById', async function(req, res, next) {
+router.delete('/applyById', async function(req) {
     const body = await useBody(req);
     // console.log(req.body);
     // console.log(id);
     try{
         const isDeleted =  await scheService.deleteApplyByUserId({id:body.id});
         return {"res" : isDeleted };
+    }catch(err){
+        sendError(req, createError({statusCode: 500, statusMessage: err}));        
+    }
+});
+
+router.post('/getSchedules',async function(req){
+    const body = await useBody(req);
+    try{
+        const lists =  await scheService.getSchedules({date:body.date});
+        return {"data" : lists };
     }catch(err){
         sendError(req, createError({statusCode: 500, statusMessage: err}));        
     }

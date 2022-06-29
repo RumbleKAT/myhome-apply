@@ -113,7 +113,7 @@ export const getSchedules = async function(param){
                         select * from home_info as a 
                             inner join home_apply as b 
                         on a.id = b.home_info_id 
-                    where b.rceptbgnde = $1; 
+                    where b.rceptbgnde = ?; 
                 `,Object.values(param))
     return res;
 }
