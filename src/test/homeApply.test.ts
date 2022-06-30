@@ -11,7 +11,7 @@ describe('HomeApply test',()=>{
         rceptBgnde : '2021-04-05',
         rceptEndde : '2021-04-05',
         przwnerPresnatnDe : '2021-04-08',
-        home_info_id : 1
+        home_info_id : 30
     };
 
     test('create home apply',async ()=>{

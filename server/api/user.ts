@@ -1,6 +1,6 @@
-import { createApp, createRouter,useBody,createError,sendError } from 'h3'
+import { createApp, createRouter,useBody,createError,sendError,useQuery } from 'h3'
 import cors from 'cors';
-import { createId, selectByEmail } from '../service/userService';
+import { createId, selectByEmail,deleteByEmail } from '../service/userService';
 import { IHomeInfo } from '../model/IHomeInfo';
 import { emailValid } from '../utils/Validation';
 
@@ -32,5 +32,21 @@ router.post('/createUser',async(req)=>{
         sendError(req, createError({statusCode: 500, statusMessage: 'User creation Error'}));
     }
 });
+
+router.get('/deleteUser',async(req)=>{
+    const query = useQuery(req);
+    const { email } = query;
+    try{
+        const res =  await deleteByEmail({"email" : email}); 
+        if(res){
+            return { "message" : "정상적으로 탈회되었습니다."}
+        }else{
+            return { "message" : "탈회 실패되었습니다. 담당자에 문의해주세요" };
+        }
+    }catch(err){
+        console.error(err);
+        sendError(req, createError({statusCode: 500, statusMessage: 'User delete Error'}));
+    }
+})
 
 export default app;

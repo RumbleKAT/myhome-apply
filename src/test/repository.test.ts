@@ -3,7 +3,9 @@ import { createId, deleteByEmail, selectByEmail } from '../../server/service/use
 
 describe('HomeInfo test',()=>{
 
-    const mail = { "email" : "ssj382@naver.com" };
+    const mail = { 
+        "email" : "ssj382@naver.com" 
+    };
 
     test('create id by mail',async ()=>{
         const res = await createId(mail);
