@@ -39,9 +39,9 @@ router.get('/deleteUser',async(req)=>{
     try{
         const res =  await deleteByEmail({"email" : email}); 
         if(res){
-            return { "message" : "정상적으로 탈회되었습니다."}
+            return { "message" : "unsubscribe successfully..."}
         }else{
-            return { "message" : "탈회 실패되었습니다. 담당자에 문의해주세요" };
+            return { "message" : "something failed please contact the administrator..." };
         }
     }catch(err){
         console.error(err);
