@@ -1,3 +1,4 @@
+/*
 import { IHomeInfo } from '~~/server/model/IHomeInfo';
 import { createId, deleteByEmail, selectByEmail } from '../../server/service/userService';
 
@@ -21,6 +22,5 @@ describe('HomeInfo test',()=>{
         const res = await deleteByEmail(mail);
         expect(res).toEqual(true);        
     });
-
-
 });
+*/

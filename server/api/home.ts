@@ -1,15 +1,23 @@
 import { createApp, createRouter,useQuery } from 'h3'
 import {getAptInfo, getDetailInfo,getRateInfo} from '../utils/HomeInfo'
 import cors from 'cors';
+import { openConnection, getCache, setCache } from '../utils/Cache';
 
 const app = createApp()
 const router = createRouter()
 
 app.use(cors());
-app.use(router)
+app.use(router);
+
+(async()=>{
+  await openConnection();
+})();
+
+const ONE_DAY_SECOND = 86400;
 
 router.get('/getInfo',async(req)=>{
-
+  //check cache data..
+  
   const currentDate = new Date();
   let nextMonth:string = `${(new Date().getMonth()+1)%12 + 1}`;
   if(nextMonth.length < 2){
@@ -31,11 +39,20 @@ router.get('/getInfo',async(req)=>{
   const { category } = useQuery(req)
   // console.log(category);
 
-  const aptList = await getAptInfo({
-    startmonth : start_month,
-    endmonth : end_month
-  },category, process.env.HOST);
-
+  const cacheList = await getCache(category.toString());
+  console.log(cacheList);
+  let aptList = null;
+  if(Array.isArray(cacheList) && cacheList.length > 0){
+    aptList = cacheList;
+    // console.log('use cache..');
+  }else{
+    aptList = await getAptInfo({
+      startmonth : start_month,
+      endmonth : end_month
+    },category, process.env.HOST);  
+    await setCache(category.toString(), JSON.stringify(aptList), ONE_DAY_SECOND);
+  }
+  
   return { "data" : aptList } ;
 });
 
