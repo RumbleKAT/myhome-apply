@@ -27,10 +27,9 @@ eventHandler.on('runBatchTask', async(category:any)=>{
 
 export default defineEventHandler(async (event) => {
   let now = moment();
-  now.format('"YYYY-MM-DD"');
 
-  let start_date = now.subtract(1, "M").format('"YYYY-MM-DD"');
-  let end_date = now.add(2, "M").format('"YYYY-MM-DD"');
+  let start_date = now.format('"YYYY-MM-DD"');
+  let end_date = now.add(1, "M").format('"YYYY-MM-DD"');
 
   console.log("start_date : " + start_date);
   console.log("end_date : " + end_date)
@@ -38,43 +37,37 @@ export default defineEventHandler(async (event) => {
   const { category} = getQuery(event)
   console.log("category : ", category);
 
-  let aptList = await getAptInfo({
-    startmonth : start_date,
-    endmonth : end_date
-    // @ts-ignore
-  },category, process.env.API_HOST)
+  // @ts-ignore
+  // let result = await isNeedUpdate(category.toString());
+  // console.log("result : " , result);
+  const result = true;
 
-  // // @ts-ignore
-  //   const result = await isNeedUpdate(category.toString());
-  // // console.log("result : " , result);
-  // // const result = true;
-  //
-  // let aptList;
-  // if(result){
-  //   aptList = await getAptInfo({
-  //     startmonth : start_date,
-  //     endmonth : end_date
-  //   },category, process.env.API_HOST)
-  //
-  //   //event emitter로 변경한다.
-  //   // eventHandler.emit('runBatchTask', category);
-  //
-  // }else{
-  //   if(category === 'APT'){
-  //     aptList = await Home.find({
-  //       CATEGORY : category,
-  //       RCEPT_BGNDE: { $gt: new Date(start_date) },
-  //       RCEPT_ENDDE: { $lt: new Date(end_date) }
-  //     });
-  //   }else{
-  //     aptList = await Home.find({
-  //       CATEGORY : category,
-  //       SUBSCRPT_RCEPT_BGNDE: { $gt: new Date(start_date) },
-  //       SUBSCRPT_RCEPT_ENDDE: { $lt: new Date(end_date) }
-  //     });
-  //   }
-  // }
+  let aptList;
+  if(result){
+    aptList = await getAptInfo({
+      startmonth : start_date,
+      endmonth : end_date
+      // @ts-ignore
+    },category, process.env.API_HOST)
 
+    //event emitter로 변경한다.
+    // eventHandler.emit('runBatchTask', category);
+
+  }else{
+    if(category === 'APT'){
+      aptList = await Home.find({
+        CATEGORY : category,
+        RCEPT_BGNDE: { $gt: new Date(start_date) },
+        RCEPT_ENDDE: { $lt: new Date(end_date) }
+      });
+    }else{
+      aptList = await Home.find({
+        CATEGORY : category,
+        SUBSCRPT_RCEPT_BGNDE: { $gt: new Date(start_date) },
+        SUBSCRPT_RCEPT_ENDDE: { $lt: new Date(end_date) }
+      });
+    }
+  }
   // @ts-ignore
     aptList = aptList.filter(p => p.HOUSE_SECD !== '10') //공공분양 제외 TOBE 로직에 추가 예정
 
