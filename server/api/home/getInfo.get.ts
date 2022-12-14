@@ -31,39 +31,45 @@ export default defineEventHandler(async (event) => {
   console.log("start_date : " + start_date);
   console.log("end_date : " + end_date)
 
-  const { category } = getQuery(event)
+  const { category} = getQuery(event)
   console.log("category : ", category);
 
-  // @ts-ignore
-    const result = await isNeedUpdate(category.toString());
-  // console.log("result : " , result);
-  // const result = true;
+  let aptList = await getAptInfo({
+    startmonth : start_date,
+    endmonth : end_date
+    // @ts-ignore
+  },category, process.env.API_HOST)
 
-  let aptList;
-  if(result){
-    aptList = await getAptInfo({
-      startmonth : start_date,
-      endmonth : end_date
-    },category, process.env.API_HOST)
-
-    //event emitter로 변경한다.
-    // eventHandler.emit('runBatchTask', category);
-
-  }else{
-    if(category === 'APT'){
-      aptList = await Home.find({
-        CATEGORY : category,
-        RCEPT_BGNDE: { $gt: new Date(start_date) },
-        RCEPT_ENDDE: { $lt: new Date(end_date) }
-      });
-    }else{
-      aptList = await Home.find({
-        CATEGORY : category,
-        SUBSCRPT_RCEPT_BGNDE: { $gt: new Date(start_date) },
-        SUBSCRPT_RCEPT_ENDDE: { $lt: new Date(end_date) }
-      });
-    }
-  }
+  // // @ts-ignore
+  //   const result = await isNeedUpdate(category.toString());
+  // // console.log("result : " , result);
+  // // const result = true;
+  //
+  // let aptList;
+  // if(result){
+  //   aptList = await getAptInfo({
+  //     startmonth : start_date,
+  //     endmonth : end_date
+  //   },category, process.env.API_HOST)
+  //
+  //   //event emitter로 변경한다.
+  //   // eventHandler.emit('runBatchTask', category);
+  //
+  // }else{
+  //   if(category === 'APT'){
+  //     aptList = await Home.find({
+  //       CATEGORY : category,
+  //       RCEPT_BGNDE: { $gt: new Date(start_date) },
+  //       RCEPT_ENDDE: { $lt: new Date(end_date) }
+  //     });
+  //   }else{
+  //     aptList = await Home.find({
+  //       CATEGORY : category,
+  //       SUBSCRPT_RCEPT_BGNDE: { $gt: new Date(start_date) },
+  //       SUBSCRPT_RCEPT_ENDDE: { $lt: new Date(end_date) }
+  //     });
+  //   }
+  // }
 
   // @ts-ignore
     aptList = aptList.filter(p => p.HOUSE_SECD !== '10') //공공분양 제외 TOBE 로직에 추가 예정
