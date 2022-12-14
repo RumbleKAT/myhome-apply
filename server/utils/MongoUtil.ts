@@ -4,6 +4,7 @@ import 'dotenv/config';
 let database:Connection;
 
 export const connectMongo = async () =>{
+    // @ts-ignore
     const uri = encodeURI(process.env.MONGO_URL);
     console.log(uri);
 
