@@ -1,0 +1,22 @@
+export type IHomeDetail = {
+    ETC_HSHLDCO : Number,
+    HOUSE_MANAGE_NO : Number,
+    HOUSE_TY : String,
+    INSTT_RECOMEND_HSHLDCO : Number,
+    LFE_FRST_HSHLDCO : Number,
+    LTTOT_TOP_AMOUNT : String,
+    MNYCH_HSHLDCO : Number,
+    MODEL_NO : String,
+    NWWDS_HSHLDCO : Number,
+    OLD_PARNTS_SUPORT_HSHLDCO : Number,
+    PBLANC_NO : Number,
+    SPSPLY_HSHLDCO : Number,
+    SUPLY_AR : String,
+    SUPLY_HSHLDCO : String,
+    TRANSR_INSTT_ENFSN_HSHLDCO : Number,
+    EXCLUSE_AR : Number,
+    GP : String,
+    SUBSCRPT_REQST_AMOUNT : Number,
+    SUPLY_AMOUNT : String,
+    TP : String
+}
