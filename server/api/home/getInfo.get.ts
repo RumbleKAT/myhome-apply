@@ -5,6 +5,10 @@ import axios from "axios";
 import * as events from "events";
 import {getAptInfo} from "~/server/utils/HomeInfo";
 import moment from "moment";
+import {connectMongo} from "~/server/utils/MongoUtil";
+(async function (){
+  await connectMongo();
+})();
 
 const eventHandler = new events.EventEmitter();
 eventHandler.on('runBatchTask', async(category:any)=>{

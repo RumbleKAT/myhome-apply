@@ -1,7 +1,10 @@
 import {defineEventHandler, getQuery} from "h3";
 import {getDetails, isExistHome, updateDatas} from "~/server/service/homeService";
 import {getDetailInfo} from "~/server/utils/HomeInfo";
-
+import {connectMongo} from "~/server/utils/MongoUtil";
+(async function (){
+  await connectMongo();
+})();
 export default defineEventHandler(async (event) => {
   const { category,houseManageNo,pblancNo } = getQuery(event);
 
