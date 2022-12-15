@@ -5,21 +5,17 @@ import axios from "axios";
 import * as events from "events";
 import {getAptInfo} from "~/server/utils/HomeInfo";
 import moment from "moment";
-import {connectMongo} from "~/server/utils/MongoUtil";
-(async function (){
-  await connectMongo();
-})();
+// import {connectMongo} from "~/server/utils/MongoUtil";
+// (async function (){
+//   await connectMongo();
+// })();
 
 const eventHandler = new events.EventEmitter();
 eventHandler.on('runBatchTask', async(category:any)=>{
-  console.log(`!! runBatch Task! ${category}`);
+  console.log(`runBatch Task! ${category}`);
   //event emitter로 변경한다.
   try{
-    const healthcheck = await axios.get(`${process.env.BATCH_URL}`);
-    if(healthcheck.status === 200){
-      console.log("batch server health check success!");
-      await axios.get(`${process.env.BATCH_URL}/refresh?category=${category}`);
-    }
+    await axios.get(`${process.env.BATCH_URL}/refresh?category=${category}`);
   }catch(e){
     console.log("[ERROR] : ", e);
   }
@@ -38,9 +34,9 @@ export default defineEventHandler(async (event) => {
   console.log("category : ", category);
 
   // @ts-ignore
-  // let result = await isNeedUpdate(category.toString());
-  // console.log("result : " , result);
-  const result = true;
+  let result = await isNeedUpdate(category.toString());
+  console.log("result : " , result);
+  // const result = true;
 
   let aptList;
   if(result){
@@ -51,7 +47,7 @@ export default defineEventHandler(async (event) => {
     },category, process.env.API_HOST)
 
     //event emitter로 변경한다.
-    // eventHandler.emit('runBatchTask', category);
+    eventHandler.emit('runBatchTask', category);
 
   }else{
     if(category === 'APT'){

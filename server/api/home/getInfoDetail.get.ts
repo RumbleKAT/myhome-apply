@@ -1,10 +1,10 @@
 import {defineEventHandler, getQuery} from "h3";
 import {getDetails, isExistHome, updateDatas} from "~/server/service/homeService";
 import {getDetailInfo} from "~/server/utils/HomeInfo";
-import {connectMongo} from "~/server/utils/MongoUtil";
-(async function (){
-  await connectMongo();
-})();
+// import {connectMongo} from "~/server/utils/MongoUtil";
+// (async function (){
+//   await connectMongo();
+// })();
 export default defineEventHandler(async (event) => {
   const { category,houseManageNo,pblancNo } = getQuery(event);
 
@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
       aptList = await getDetailInfo({
         houseManageNo : houseManageNo,
         pblancNo : pblancNo
+        // @ts-ignore
       },category, process.env.API_HOST);
       await updateDatas(Number(houseManageNo),aptList, 'detail');
     }
@@ -27,6 +28,7 @@ export default defineEventHandler(async (event) => {
     aptList = await getDetailInfo({
       houseManageNo : houseManageNo,
       pblancNo : pblancNo
+      // @ts-ignore
     },category, process.env.API_HOST);
   }
 

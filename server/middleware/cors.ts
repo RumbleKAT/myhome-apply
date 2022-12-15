@@ -1,4 +1,8 @@
 import { defineEventHandler, setResponseHeaders } from 'h3'
+import {connectMongo} from "~/server/utils/MongoUtil";
+(async function (){
+    await connectMongo();
+})();
 
 export default defineEventHandler((event) => {
     setResponseHeaders(event, {
