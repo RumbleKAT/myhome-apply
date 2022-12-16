@@ -7,8 +7,11 @@ import moment from "moment";
 // })();
 
 export default defineEventHandler(async (event) => {
-    const {category} = getQuery(event);
+    const {category, start, end} = getQuery(event);
     let now = moment();
+    if(start && end){
+        console.log("worked!");
+    }
 
     let start_date = now.format('"YYYY-MM-DD"');
     let end_date = now.add(1, "M").format('"YYYY-MM-DD"');
@@ -17,5 +20,6 @@ export default defineEventHandler(async (event) => {
     console.log("end_date : " + end_date)
 
     const res = await refresh(category, { start_date, end_date });
+    console.log("batch : ", res);
     return { "response" : res };
 });

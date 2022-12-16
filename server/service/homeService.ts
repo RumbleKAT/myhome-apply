@@ -3,6 +3,7 @@ import {Home} from "../model/schemas/Home.schema";
 export const isExistHome = async (HOUSE_MANAGE_NO: number) =>{
     const result = await Home.find({ HOUSE_MANAGE_NO : HOUSE_MANAGE_NO});
     if(result.length > 0){
+        console.log("check", result);
         const hasErrorMsg = await getRates(HOUSE_MANAGE_NO);
         return Array.isArray(hasErrorMsg) ? hasErrorMsg.filter(param => param.hasOwnProperty("msg")).length < 1 : hasErrorMsg.hasOwnProperty("msg")
     }
@@ -49,6 +50,7 @@ export const getDateDiff = (d1:any, d2:any) => {
 
 export const isNeedUpdate = async (category: string)=>{
     const result:any = await Home.find({CATEGORY : category},{ CRDAT : 1, _id : 0}).sort({"CRDAT": -1}).limit(1);
+    console.log(result);
     if(result.length === 0) return true;
     const today = new Date();
     return getDateDiff(result[0].CRDAT, today) >= 6

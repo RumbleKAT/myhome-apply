@@ -9,27 +9,27 @@ export default defineEventHandler(async (event) => {
   const { category,houseManageNo,pblancNo } = getQuery(event);
 
   const result = await isExistHome(Number(houseManageNo));
+  // console.log("check2",result);
 
+  let flag = false;
   let aptList
   if(result){
     aptList = await getDetails(Number(houseManageNo));
-    //save the data
-    if(aptList.length >= 1 && aptList[0]._doc.hasOwnProperty("msg")){ // error 리턴시 저장하지 않는다.
-      console.log("save it");
-      aptList = await getDetailInfo({
-        houseManageNo : houseManageNo,
-        pblancNo : pblancNo
-        // @ts-ignore
-      },category, process.env.API_HOST);
-      await updateDatas(Number(houseManageNo),aptList, 'detail');
+    if(aptList.length == 0){
+      flag = true;
     }
   }else{
+    flag = true;
+  }
 
+  if(flag){
+    console.log("update details");
     aptList = await getDetailInfo({
       houseManageNo : houseManageNo,
       pblancNo : pblancNo
       // @ts-ignore
     },category, process.env.API_HOST);
+    await updateDatas(Number(houseManageNo), aptList,'detail')
   }
 
   return { "data" : aptList } ;

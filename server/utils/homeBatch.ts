@@ -12,21 +12,21 @@ export const refresh = async( category:any , date:any ) =>{
     },category, process.env.API_HOST);
 
     const homeRateDetail = result.map(async (home:any)=>{
-        console.log(home);
-        const detailInfo = await homeInfo.getDetailInfo({
-            houseManageNo : home.HOUSE_MANAGE_NO,
-            pblancNo : home.PBLANC_NO
-            // @ts-ignore
-        },category,process.env.API_HOST);
+        try{
+            const detailInfo = await homeInfo.getDetailInfo({
+                houseManageNo : home.HOUSE_MANAGE_NO,
+                pblancNo : home.PBLANC_NO
+                // @ts-ignore
+            },category,process.env.API_HOST);
 
-        console.log(detailInfo);
-        home["HOME_DETAILS"] = detailInfo;
-
-        const rateList = await homeInfo.getRateInfo({houseManageNo: home.HOUSE_MANAGE_NO, houseSeCd : home.HOUSE_SECD }, process.env.RATE_HOST);
-        console.log(rateList);
-        home["HOME_RATES"] = rateList;
-        home["CRDAT"] = date.start_date;
-
+            const rateList = await homeInfo.getRateInfo({houseManageNo: home.HOUSE_MANAGE_NO, houseSeCd : home.HOUSE_SECD }, process.env.RATE_HOST);
+            // console.log(rateList);
+            home["HOME_RATES"] = rateList;
+            home["CRDAT"] = date.start_date;
+            home["HOME_DETAILS"] = detailInfo;
+        }catch(e){
+            console.log("[ERROR] :",e);
+        }
         return home;
     });
 
