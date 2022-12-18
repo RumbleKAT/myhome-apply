@@ -5,6 +5,7 @@ import axios from "axios";
 import * as events from "events";
 import {getAptInfo} from "~/server/utils/HomeInfo";
 import moment from "moment";
+import {refresh} from "~/server/utils/homeBatch";
 // import {connectMongo} from "~/server/utils/MongoUtil";
 // (async function (){
 //   await connectMongo();
@@ -30,10 +31,12 @@ export default defineEventHandler(async (event) => {
   console.log("start_date : " + start_date);
   console.log("end_date : " + end_date)
 
-  const { category} = getQuery(event)
+  const { category } = getQuery(event)
   console.log("category : ", category);
 
-  const result = true;
+  // @ts-ignore
+  const result = await isNeedUpdate(category.toString());
+  console.log("isNeedUpdate : " + result);
 
   let aptList;
   if(result){
@@ -41,7 +44,8 @@ export default defineEventHandler(async (event) => {
       startmonth : start_date,
       endmonth : end_date
       // @ts-ignore
-    },category, process.env.API_HOST)
+    },category, process.env.API_HOST);
+    await refresh(category,{},aptList);
   }else{
     //TODO: mongodb 적용하기
     if(category === 'APT'){

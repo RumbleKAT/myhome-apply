@@ -14,8 +14,13 @@ export default defineEventHandler(async (event) => {
   let flag = false;
   let aptList
   if(result){
-    aptList = await getDetails(Number(houseManageNo));
-    if(aptList.length == 0){
+    try{
+      aptList = await getDetails(Number(houseManageNo));
+      if(aptList.length == 0){
+        flag = true;
+      }
+    }catch(e) {
+      console.log(e);
       flag = true;
     }
   }else{

@@ -1,4 +1,5 @@
 import {Home} from "../model/schemas/Home.schema";
+import moment from "moment";
 
 export const isExistHome = async (HOUSE_MANAGE_NO: number) =>{
     const result = await Home.find({ HOUSE_MANAGE_NO : HOUSE_MANAGE_NO});
@@ -50,9 +51,10 @@ export const getDateDiff = (d1:any, d2:any) => {
 
 export const isNeedUpdate = async (category: string)=>{
     const result:any = await Home.find({CATEGORY : category},{ CRDAT : 1, _id : 0}).sort({"CRDAT": -1}).limit(1);
-    console.log(result);
     if(result.length === 0) return true;
-    const today = new Date();
-    return getDateDiff(result[0].CRDAT, today) >= 6
+    let std_date = moment().subtract(6,"days").format('"YYYY-MM-DD"');
+    console.log("CRDAT : " + result);
+    console.log("STD_DATE : " + std_date);
+    return moment().subtract(6,"days").isAfter(result[0].CRDAT);
 }
 //7일이상 해당 카테고리로 업데이트가 안된 경우, 업데이트 진행
