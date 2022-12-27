@@ -3,7 +3,7 @@ name : Weekly Batch Job
 
 on:
   schedule:
-    - cron : '45 * * * *'
+    - cron : '0 0 * * 0'
     
 jobs:
   fetch-APT:
@@ -17,6 +17,13 @@ jobs:
       - name: backup logging
         if: ${{ failure() }}
         run: echo backup APT
+  sleep:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sleep for 30 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '30s'
   fetch-NonApt:
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +35,13 @@ jobs:
       - name: backup logging
         if: ${{ failure() }}
         run: echo backup NonApt 
+  sleep-step:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sleep for 30 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '30s'
   fetch-Remain:
     runs-on: ubuntu-latest
     steps:
