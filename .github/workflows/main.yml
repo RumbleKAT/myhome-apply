@@ -20,10 +20,10 @@ jobs:
   sleep:
     runs-on: ubuntu-latest
     steps:
-    - name: Sleep for 30 seconds
+    - name: Sleep for 10 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '30s'
+        time: '10s'
   fetch-NonApt:
     runs-on: ubuntu-latest
     steps:
@@ -38,10 +38,10 @@ jobs:
   sleep-step:
     runs-on: ubuntu-latest
     steps:
-    - name: Sleep for 30 seconds
+    - name: Sleep for 10 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '30s'
+        time: '10s'
   fetch-Remain:
     runs-on: ubuntu-latest
     steps:
