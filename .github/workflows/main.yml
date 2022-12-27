@@ -1,0 +1,41 @@
+# weekly batch-job.yml
+name : Weekly Batch Job
+
+on:
+  schedule:
+    - cron : '45 * * * *'
+    
+jobs:
+  fetch-APT:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch URL
+        uses: boyeborg/fetch-url-action@v1.1
+        with:
+          url: https://myhome-apply.vercel.app/api/refresh?category=APT
+          run: echo "run the apt"
+      - name: backup logging
+        if: ${{ failure() }}
+        run: echo backup APT
+  fetch-NonApt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch URL
+        uses: boyeborg/fetch-url-action@v1.1
+        with:
+          url: https://myhome-apply.vercel.app/api/refresh?category=NonApt
+          run: echo "run the NonApt"
+      - name: backup logging
+        if: ${{ failure() }}
+        run: echo backup NonApt 
+  fetch-Remain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch URL
+        uses: boyeborg/fetch-url-action@v1.1
+        with:
+          url: https://myhome-apply.vercel.app/api/refresh?category=Remain
+          run: echo "run the Remain"
+      - name: backup logging
+        if: ${{ failure() }}
+        run: echo backup Remain 
