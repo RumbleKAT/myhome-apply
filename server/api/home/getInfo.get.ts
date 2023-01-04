@@ -47,7 +47,6 @@ export default defineEventHandler(async (event) => {
     },category, process.env.API_HOST);
     await refresh(category,{},aptList);
   }else{
-    //TODO: mongodb 적용하기
     if(category === 'APT'){
       aptList = await Home.find({
         CATEGORY : category,
@@ -56,7 +55,7 @@ export default defineEventHandler(async (event) => {
     }else{
       aptList = await Home.find({
         CATEGORY : category,
-        RCEPT_BGNDE: { $gte: new Date(start_date),$lt: new Date(end_date) }
+        SUBSCRPT_RCEPT_BGNDE: { $gte: new Date(start_date),$lt: new Date(end_date) }
       });
     }
   }
