@@ -25,14 +25,18 @@ eventHandler.on('runBatchTask', async(category:any)=>{
 export default defineEventHandler(async (event) => {
   let now = moment();
 
-  let start_date = now.subtract(1, "M").format('"YYYY-MM-DD"');
-  let end_date = now.add(2, "M").format('"YYYY-MM-DD"');
+  let start_date:string = now.subtract(1, "M").format('"YYYY-MM-DD"');
+  let end_date:string = now.add(2, "M").format('"YYYY-MM-DD"');
 
+  const { category, s_date, e_date } = getQuery(event)
+  if(s_date && e_date){
+    start_date = s_date as string;
+    end_date = e_date as string;
+  }
+
+  console.log("category : ", category);
   console.log("start_date : " + start_date);
   console.log("end_date : " + end_date)
-
-  const { category } = getQuery(event)
-  console.log("category : ", category);
 
   // @ts-ignore
   const result = await isNeedUpdate(category.toString());
