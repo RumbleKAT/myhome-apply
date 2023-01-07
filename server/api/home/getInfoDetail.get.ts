@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if(result){
     try{
       aptList = await getDetails(Number(houseManageNo));
-      if(aptList.length == 0){
+      if(!aptList[0].HOUSE_MANAGE_NO){
         flag = true;
       }
     }catch(e) {
