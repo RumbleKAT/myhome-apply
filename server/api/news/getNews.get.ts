@@ -1,33 +1,34 @@
-import {defineEventHandler} from "h3";
-import Parser from 'rss-parser';
-const parser = new Parser();
+import {defineEventHandler, getQuery} from "h3";
+import axios from 'axios';
+import cheerio from 'cheerio';
 
 export default defineEventHandler(async (event) => {
-    let searchKeyword = "부동산";
-    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(searchKeyword)}&hl=ko&gl=KR&ceid=KR%3Ako`;
-
+    const { keyword } = getQuery(event);
+    let searchKeyword = "";
+    if(!keyword) searchKeyword = encodeURIComponent("부동산");
+    const url = `https://news.google.com/rss/search?q=${searchKeyword}&hl=ko&gl=KR&ceid=KR%3Ako`;
     try {
-        console.log(url);
-        // @ts-ignore
-        const feed = await parser.parseURL(url);
-        // @ts-ignore
-        const items  = feed.items.map(item => ({
-            title: item.title,
-            link: item.link,
-            pubDate: item.pubDate,
-            creator: item.creator,
-            content: item.content,
-            contentSnippet: item.contentSnippet,
-        }));
+        const {data} = await axios.get(`${url}`);
+        const $ = cheerio.load(data, {xmlMode: true});
 
         return {
-            title: feed.title,
-            description: feed.description,
-            link: feed.link,
-            items
-        }
-    } catch (error) {
-        console.error('Error:', error);
+            title: $('channel > title').text(),
+            description: $('channel > description').text(),
+            link: $('channel > link').text(),
+            items: $('channel > item').map((_, element) => {
+                const item = $(element);
+                return {
+                    title: item.find('title').text(),
+                    link: item.find('link').text(),
+                    pubDate: item.find('pubDate').text(),
+                    creator: item.find('dc\\:creator').text(),
+                    content: item.find('content\\:encoded').text(),
+                    contentSnippet: item.find('description').text(),
+                };
+            }).get()
+        };
+    }catch (e) {
+        console.error(e);
         return {
             "message" : "Not Found"
         }
