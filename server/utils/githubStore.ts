@@ -2,7 +2,7 @@ export interface uploadDTO {
     owner: string,
     repo: string,
     path: string,
-    data: object,
+    data?: object,
     token: any
 }
 export const uploadJsonToGitHub = async (params:uploadDTO) => {
@@ -59,4 +59,33 @@ export const uploadJsonToGitHub = async (params:uploadDTO) => {
         };
     }
     return resultMsg;
+};
+
+export const getJsonFromGitHub = async (params:uploadDTO) => {
+    const apiUrl = `https://api.github.com/repos/${params.owner}/${params.repo}/contents/${params.path}`;
+    const headers = {
+        Authorization: `token ${params.token}`,
+        Accept: "application/vnd.github+json",
+    };
+    let resultMsg = null;
+
+    try {
+        const response = await fetch(apiUrl, { headers });
+
+        if (!response.ok) {
+            throw new Error(`GitHub API responded with ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        const contentBase64 = responseData.content;
+        const content = Buffer.from(contentBase64, "base64").toString("utf-8");
+
+        console.log("Fetched content:", content);
+        return content;
+    } catch (error) {
+        console.error("Error fetching file:", error);
+        return {
+            "message" : error
+        };
+    }
 };
