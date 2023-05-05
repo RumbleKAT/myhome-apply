@@ -1,17 +1,31 @@
+import {convertToString} from "~/server/utils/typeUtil";
+
 export interface uploadDTO {
     owner: string,
     repo: string,
     path: string,
-    data?: object,
+    data?: any,
     token: any
 }
+
+export enum statusCode{
+    error,
+    success
+}
+
+export interface ResponseDTO{
+    type: statusCode,
+    message: string,
+    data?: object
+}
+
 export const uploadJsonToGitHub = async (params:uploadDTO) => {
     const apiUrl = `https://api.github.com/repos/${params.owner}/${params.repo}/contents/${params.path}`;
     const headers = {
         Authorization: `token ${params.token}`,
         Accept: "application/vnd.github+json",
     };
-    let resultMsg = null;
+    let resultMsg:ResponseDTO;
 
     try {
         console.log(params.data);
@@ -50,12 +64,14 @@ export const uploadJsonToGitHub = async (params:uploadDTO) => {
         const responseData = await uploadResponse.json();
         console.log("JSON data uploaded successfully:", responseData);
         resultMsg = {
-            "msg": "success"
+            type: statusCode.success,
+            message: "save success"
         };
     } catch (error) {
         console.error("Error uploading JSON data:", error);
         resultMsg = {
-            "msg": error
+            type: statusCode.error,
+            message: convertToString(error)
         };
     }
     return resultMsg;
@@ -71,6 +87,8 @@ export const getJsonFromGitHub = async (params:uploadDTO) => {
 
     try {
         const response = await fetch(apiUrl, { headers });
+        console.log(response);
+        console.log(params);
 
         if (!response.ok) {
             throw new Error(`GitHub API responded with ${response.status}`);
@@ -81,11 +99,15 @@ export const getJsonFromGitHub = async (params:uploadDTO) => {
         const content = Buffer.from(contentBase64, "base64").toString("utf-8");
 
         console.log("Fetched content:", content);
-        return content;
+        return {
+            type: statusCode.success,
+            message: "save success"
+        };
     } catch (error) {
         console.error("Error fetching file:", error);
         return {
-            "message" : error
+            type: statusCode.error,
+            message: convertToString(error)
         };
     }
 };
