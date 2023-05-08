@@ -20,8 +20,12 @@ export default defineEventHandler(async (event) => {
 
     console.log("start_date : " + start_date);
     console.log("end_date : " + end_date)
-
-    const res = await refresh(category, { start_date, end_date },null);
+    let res;
+    try{
+        res = await refresh(category, { start_date, end_date },null);
+    }catch (e){
+        console.log("ERROR",e);
+    }
     console.log("batch : ", res);
     return { "response" : res };
 });
