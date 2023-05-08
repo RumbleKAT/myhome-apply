@@ -85,8 +85,8 @@ export const getAptInfo = async function(param:any,serviceType:string, host:stri
     // param.startmonth = `${param.startmonth}-15`;
     // param.endmonth = `${param.endmonth}-01`;
     if(param.startmonth.indexOf('"')!= -1){
-        param.startmonth = param.startmonth.replaceAll('"','');
-        param.endmonth = param.endmonth.replaceAll('"','');
+        param.startmonth = param.startmonth.replace(/"/g,'');
+        param.endmonth = param.endmonth.replace(/"/g,'');
     }
     console.log(param);
 
