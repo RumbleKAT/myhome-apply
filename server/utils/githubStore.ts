@@ -101,7 +101,8 @@ export const getJsonFromGitHub = async (params:uploadDTO) => {
         console.log("Fetched content:", content);
         return {
             type: statusCode.success,
-            message: "save success"
+            message: "save success",
+            data: content
         };
     } catch (error) {
         console.error("Error fetching file:", error);

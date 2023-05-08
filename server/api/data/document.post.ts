@@ -3,12 +3,12 @@ import {getDocument} from "~/server/repository/DocumentRepository";
 import {uploadDTO} from "~/server/utils/githubStore";
 
 export default defineEventHandler(async(event)=> {
-    const { path, contentID } = await readBody(event);
+    const { path } = await readBody(event);
     let fetchUrl = "";
-    if(contentID === "Rate"){
-        fetchUrl = "./api/rate/getRate";
-    }else if (contentID === "StdRate"){
-        fetchUrl = "./api/rate/getStdRate";
+    if (path.includes("StdRate")){
+        fetchUrl = `${process.env.BASE_URL}/api/rate/getStdRate`;
+    }else if(path.includes("Rate")){
+        fetchUrl = `${process.env.BASE_URL}/api/rate/getRate`;
     }
 
     const uploadDto:uploadDTO = {

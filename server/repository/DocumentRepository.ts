@@ -11,16 +11,26 @@ function isDateOver(dateA: Date, dateB: Date, diffDate: Number): boolean {
     return daysDiff > diffDate;
 }
 
-async function fetchLastModifiedDate(username: string, repo: string, path: string): Promise<Date | null> {
-    const url = `https://api.github.com/repos/${username}/${repo}/commits?path=${encodeURIComponent(path)}&per_page=1`;
+async function fetchFileHistory(
+    owner: string,
+    repo: string,
+    path: string,
+    authToken: string
+): Promise<Date | null> {
+    const url = `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(path)}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    });
 
     if (response.ok) {
         const commits = await response.json();
         if (commits.length > 0) {
-            const commit = commits[0];
-            const lastModified = new Date(commit.commit.author.date);
+            const lastModifiedTimestamp = commits[0].commit.committer.date;
+            const lastModified = new Date(lastModifiedTimestamp);
             return lastModified;
         }
     }
@@ -33,16 +43,15 @@ const saveDocument = async (url:string, uploadParam:uploadDTO) =>{
     if (fetchedInfo.status !== 404) {
         const data = await fetchedInfo.json();
         console.log(data);
-
-        return await fetch(url,{
+        return await fetch(`${process.env.BASE_URL}/api/data/storage`,{
             method: 'POST',
             body: JSON.stringify({
-                data: uploadParam.data,
+                data: data,
                 path: uploadParam.path
             })
         }).then((res)=>{
             console.log("upload:",res);
-            return res.json();
+            return data;
         });
     }
     return {
@@ -51,16 +60,24 @@ const saveDocument = async (url:string, uploadParam:uploadDTO) =>{
     }
 }
 export const getDocument = async (param:uploadDTO, fetchUrl:string) =>{
+    // @ts-ignore
     const response:ResponseDTO = await getJsonFromGitHub(param)
     if(response.type === statusCode.success){
         // validate 1 week over
-        const lastModifed = await fetchLastModifiedDate(
+        const lastModifed = await fetchFileHistory(
             param.owner,
             param.repo,
-            param.path
+            param.path,
+            param.token
         );
-        if(lastModifed !== null && !isDateOver(lastModifed,new Date(),7))
-           return response.data;
+        console.log(lastModifed);
+        if(lastModifed !== null && !isDateOver(lastModifed,new Date(),7)){
+            if(response.data){
+                // @ts-ignore
+                return JSON.parse(response.data);
+            }
+        }
+    }else{
+        return await saveDocument(fetchUrl, param);
     }
-    return await saveDocument(fetchUrl, param);
 }

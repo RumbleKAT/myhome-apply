@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
         data: data,
         token: process.env.GITHUB_TOKEN
     };
+    console.log(uploadDto);
 
     return await uploadJsonToGitHub(uploadDto);
 });
