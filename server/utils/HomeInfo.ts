@@ -84,8 +84,10 @@ export const getAptInfo = async function(param:any,serviceType:string, host:stri
     //해당월 시작일부터 다음월 시작일 이전까지 공고를 조회한다.  
     // param.startmonth = `${param.startmonth}-15`;
     // param.endmonth = `${param.endmonth}-01`;
-    param.startmonth = param.startmonth.replaceAll('"','');
-    param.endmonth = param.endmonth.replaceAll('"','');
+    if(param.startmonth.indexOf('"')!= -1){
+        param.startmonth = param.startmonth.replace(/"/g,'');
+        param.endmonth = param.endmonth.replace(/"/g,'');
+    }
     console.log(param);
 
     let url = `${host}/${serviceNM}?page=${pageNum}&perPage=${pageSize}&cond%5BRCRIT_PBLANC_DE%3A%3AGTE%5D=${param.startmonth}&cond%5BRCRIT_PBLANC_DE%3A%3ALTE%5D=${param.endmonth}&serviceKey=${serviceKey}`;
