@@ -77,7 +77,6 @@ export const getDocument = async (param:uploadDTO, fetchUrl:string) =>{
                 return JSON.parse(response.data);
             }
         }
-    }else{
-        return await saveDocument(fetchUrl, param);
     }
+    return await saveDocument(fetchUrl, param);
 }
