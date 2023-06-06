@@ -6,7 +6,7 @@ function getDaysApart(dateA: Date, dateB: Date): number {
     return Math.floor(timeDiff / oneDayInMilliseconds);
 }
 
-function isDateOver(dateA: Date, dateB: Date, diffDate: Number): boolean {
+function isDateOver(dateA: Date, dateB: Date, diffDate: number): boolean {
     const daysDiff = getDaysApart(dateA, dateB);
     return daysDiff > diffDate;
 }
@@ -72,11 +72,13 @@ export const getDocument = async (param:uploadDTO, fetchUrl:string) =>{
         );
         console.log(lastModifed);
         if(lastModifed !== null && !isDateOver(lastModifed,new Date(),7)){
+            console.log("not refresh!");
             if(response.data){
                 // @ts-ignore
                 return JSON.parse(response.data);
             }
         }
     }
+    console.log("refresh!");
     return await saveDocument(fetchUrl, param);
 }
