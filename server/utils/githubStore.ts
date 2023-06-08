@@ -77,6 +77,39 @@ export const uploadJsonToGitHub = async (params:uploadDTO) => {
     return resultMsg;
 };
 
+
+export const deleteJsonToGitHub = async (params:uploadDTO) => {
+    return await fetch(`https://api.github.com/repos/${params.owner}/${params.repo}/contents/${params.path}`, {
+        headers: {
+            'Authorization': `token ${params.token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const sha = data.sha;
+
+            return fetch(`https://api.github.com/repos/${params.owner}/${params.repo}/contents/${params.path}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${params.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: 'delete file',
+                    sha: sha
+                })
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('File deleted');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};
+
 export const getJsonFromGitHub = async (params:uploadDTO) => {
     const apiUrl = `https://api.github.com/repos/${params.owner}/${params.repo}/contents/${params.path}`;
     const headers = {
@@ -102,7 +135,7 @@ export const getJsonFromGitHub = async (params:uploadDTO) => {
         return {
             type: statusCode.success,
             message: "save success",
-            data: content
+            data: JSON.parse(content)
         };
     } catch (error) {
         console.error("Error fetching file:", error);

@@ -5,10 +5,12 @@ import {uploadDTO} from "~/server/utils/githubStore";
 export default defineEventHandler(async(event)=> {
     const { path } = await readBody(event);
     let fetchUrl = "";
-    if (path.includes("StdRate")){
+    if (path === "StdRate.json"){
         fetchUrl = `${process.env.BASE_URL}/api/rate/getStdRate`;
-    }else if(path.includes("Rate")){
+    }else if(path === "Rate.json"){
         fetchUrl = `${process.env.BASE_URL}/api/rate/getRate`;
+    }else{
+        return "Not Found";
     }
 
     const uploadDto:uploadDTO = {

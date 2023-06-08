@@ -1,4 +1,4 @@
-import {getJsonFromGitHub, ResponseDTO, statusCode, uploadDTO} from "~/server/utils/githubStore";
+import {deleteJsonToGitHub, getJsonFromGitHub, ResponseDTO, statusCode, uploadDTO} from "~/server/utils/githubStore";
 
 function getDaysApart(dateA: Date, dateB: Date): number {
     const oneDayInMilliseconds = 86400000;
@@ -62,23 +62,11 @@ const saveDocument = async (url:string, uploadParam:uploadDTO) =>{
 export const getDocument = async (param:uploadDTO, fetchUrl:string) =>{
     // @ts-ignore
     const response:ResponseDTO = await getJsonFromGitHub(param)
-    if(response.type === statusCode.success){
-        // validate 1 week over
-        const lastModifed = await fetchFileHistory(
-            param.owner,
-            param.repo,
-            param.path,
-            param.token
-        );
-        console.log(lastModifed);
-        if(lastModifed !== null && !isDateOver(lastModifed,new Date(),7)){
-            console.log("not refresh!");
-            if(response.data){
-                // @ts-ignore
-                return JSON.parse(response.data);
-            }
-        }
-    }
-    console.log("refresh!");
+    // delete file
+    const deleteRes = await deleteJsonToGitHub(param);
+    console.log(deleteRes);
+    // refresh
+    console.log("refresh! create new file");
+    // return "create a file";
     return await saveDocument(fetchUrl, param);
 }
