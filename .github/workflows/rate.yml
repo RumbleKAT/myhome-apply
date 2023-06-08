@@ -1,0 +1,30 @@
+name : Weekly Batch Job2
+
+on:
+  schedule:
+    - cron : '0 0 * * 5'
+    
+jobs:
+  fetch-APT:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch URL
+        run: |
+          curl -X POST https://myhome-apply.vercel.app/api/data/document \
+          -H "Content-Type: application/json" \
+          -d '{ "path": "Rate.json" }'
+  sleep:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sleep for 10 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '10s'
+  fetch-NonApt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch URL
+        run: |
+          curl -X POST https://myhome-apply.vercel.app/api/data/document \
+          -H "Content-Type: application/json" \
+          -d '{ "path": "StdRate.json" }'
