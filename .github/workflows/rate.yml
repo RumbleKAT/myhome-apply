@@ -28,3 +28,10 @@ jobs:
           curl -X POST https://myhome-apply.vercel.app/api/data/document \
           -H "Content-Type: application/json" \
           -d '{ "path": "StdRate.json" }'
+  sleep-step:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sleep for 10 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '10s'
