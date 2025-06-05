@@ -1,4 +1,10 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import os from 'os'
+
+// Polyfill os.availableParallelism for older Node versions
+if (!(os as any).availableParallelism) {
+  ;(os as any).availableParallelism = () => os.cpus().length
+}
 
 export default defineNuxtConfig({
   nitro: {
