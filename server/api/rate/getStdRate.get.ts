@@ -1,9 +1,15 @@
 import {defineEventHandler} from "h3";
 import axios from 'axios';
 import cheerio from 'cheerio';
+import { getCache, setCache } from "~/server/utils/localCache";
 
 const url = 'https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643';
 export default defineEventHandler(async (event) => {
+    const cacheKey = 'rate:std';
+    const cached = getCache(cacheKey);
+    if (cached) {
+        return cached;
+    }
 
     try{
         const response = await axios.get(url)
@@ -23,9 +29,11 @@ export default defineEventHandler(async (event) => {
             });
         });
 
-        return {
+        const response = {
             items : data
         };
+        setCache(cacheKey, response, 60 * 60 * 1000);
+        return response;
     }catch (e) {
         console.log(e);
         return {

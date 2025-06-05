@@ -1,9 +1,16 @@
 import {defineEventHandler} from "h3";
 import axios from 'axios';
 import cheerio from 'cheerio';
+import { getCache, setCache } from "~/server/utils/localCache";
 
 const url = 'https://www.hf.go.kr/ko/sub02/sub02_01_07_01.do'
 export default defineEventHandler(async (event) => {
+    const cacheKey = 'rate:get';
+    const cached = getCache(cacheKey);
+    if (cached) {
+        return cached;
+    }
+
     const { data } = await axios.get(url)
     const $ = cheerio.load(data);
     let period:string = "";
@@ -36,10 +43,12 @@ export default defineEventHandler(async (event) => {
                 "call" : p[2]
             }
         });
-        return {
+        const response = {
             period,
             bank
-        }
+        };
+        setCache(cacheKey, response, 60 * 60 * 1000);
+        return response;
     }catch (e) {
         console.log(e);
         return {
