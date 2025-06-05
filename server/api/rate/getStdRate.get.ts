@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
     }
 
     try{
-        const response = await axios.get(url)
-        const $ = cheerio.load(response.data);
+        const res = await axios.get(url)
+        const $ = cheerio.load(res.data);
         const tableRows = $('table.fixed tbody tr');
         const data: { date: string; rate: string; }[] = [];
 
@@ -29,11 +29,11 @@ export default defineEventHandler(async (event) => {
             });
         });
 
-        const response = {
+        const result = {
             items : data
         };
-        setCache(cacheKey, response, 60 * 60 * 1000);
-        return response;
+        setCache(cacheKey, result, 60 * 60 * 1000);
+        return result;
     }catch (e) {
         console.log(e);
         return {
