@@ -1,13 +1,19 @@
 import {defineEventHandler} from "h3";
 import axios from 'axios';
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
+import { getCache, setCache } from "~/server/utils/localCache";
 
 const url = 'https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643';
 export default defineEventHandler(async (event) => {
+    const cacheKey = 'rate:std';
+    const cached = getCache(cacheKey);
+    if (cached) {
+        return cached;
+    }
 
     try{
-        const response = await axios.get(url)
-        const $ = cheerio.load(response.data);
+        const res = await axios.get(url)
+        const $ = load(res.data);
         const tableRows = $('table.fixed tbody tr');
         const data: { date: string; rate: string; }[] = [];
 
@@ -23,9 +29,11 @@ export default defineEventHandler(async (event) => {
             });
         });
 
-        return {
+        const result = {
             items : data
         };
+        setCache(cacheKey, result, 60 * 60 * 1000);
+        return result;
     }catch (e) {
         console.log(e);
         return {

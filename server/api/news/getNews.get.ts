@@ -1,6 +1,6 @@
 import {defineEventHandler, getQuery} from "h3";
 import axios from 'axios';
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 
 export default defineEventHandler(async (event) => {
     const { keyword } = getQuery(event);
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const url = `https://news.google.com/rss/search?q=${searchKeyword}&hl=ko&gl=KR&ceid=KR%3Ako`;
     try {
         const {data} = await axios.get(`${url}`);
-        const $ = cheerio.load(data, {xmlMode: true});
+        const $ = load(data, {xmlMode: true});
 
         return {
             title: $('channel > title').text(),
