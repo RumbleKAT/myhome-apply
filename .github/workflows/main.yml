@@ -53,3 +53,14 @@ jobs:
       - name: backup logging
         if: ${{ failure() }}
         run: echo backup Remain 
+  weekly-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger weekly report
+        uses: boyeborg/fetch-url-action@v1.1
+        with:
+          url: https://myhome-apply.vercel.app/api/report/weekly?category=APT
+          run: echo "run weekly report"
+      - name: backup logging
+        if: ${{ failure() }}
+        run: echo backup weekly report
