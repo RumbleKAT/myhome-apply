@@ -1,6 +1,6 @@
 import {defineEventHandler} from "h3";
 import axios from 'axios';
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 import { getCache, setCache } from "~/server/utils/localCache";
 
 const url = 'https://www.hf.go.kr/ko/sub02/sub02_01_07_01.do'
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const { data } = await axios.get(url)
-    const $ = cheerio.load(data);
+    const $ = load(data);
     let period:string = "";
 
     $('.taR.font16.mgt30').each(function (i, elem) {

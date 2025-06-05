@@ -1,6 +1,6 @@
 import {defineEventHandler} from "h3";
 import axios from 'axios';
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 import { getCache, setCache } from "~/server/utils/localCache";
 
 const url = 'https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643';
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
     try{
         const res = await axios.get(url)
-        const $ = cheerio.load(res.data);
+        const $ = load(res.data);
         const tableRows = $('table.fixed tbody tr');
         const data: { date: string; rate: string; }[] = [];
 
