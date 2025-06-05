@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "nuxt": "^3.0.0",
+    "nuxt": "^3.9.0",
     "jest": "^29.0.0",
     "ts-jest": "^29.0.0",
     "@types/jest": "^29.0.0"
