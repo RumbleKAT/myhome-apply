@@ -13,3 +13,7 @@ export function getCache<T>(key: string): T | undefined {
 export function setCache(key: string, value: any, ttlMs: number = 5 * 60 * 1000) {
   cache.set(key, { value, expiresAt: Date.now() + ttlMs });
 }
+
+export function clearCache() {
+  cache.clear();
+}
